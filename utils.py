@@ -1,12 +1,23 @@
 import random
+import unidecode
+
+# Liste des cartes AML par défaut
+DEFAULT_CARDS = [
+    "Beneficial Owner",
+    "Shell Company",
+    "Name Screening",
+    "PEP",
+    "Strawman"
+]
 
 def get_cards(n=5):
-    concepts = [
-        "Name Screening", "Beneficial Owner", "PEP", "Sanctioned Entity",
-        "Shell Company", "Smurfing", "Wire Transfer", "FATF",
-        "Suspicious Activity Report", "KYC", "CDD", "MLRO"
-    ]
-    return random.sample(concepts, n)
+    """Retourne une sélection aléatoire de cartes AML."""
+    return random.sample(DEFAULT_CARDS, k=n)
 
-def validate_guess(card, guess):
-    return card.strip().lower() == guess.strip().lower()
+def normalize(text):
+    """Supprime les accents et met en minuscule."""
+    return unidecode.unidecode(text.strip().lower())
+
+def validate_guess(answer, guess):
+    """Compare guess et réponse en normalisant le texte."""
+    return normalize(answer) == normalize(guess)
