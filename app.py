@@ -1,10 +1,9 @@
 import streamlit as st
 import time
-from utils import get_cards, validate_guess
+from utils import get_cards, validate_guess, normalize
 from session import init_session_state
-import unidecode
 
-# Initialisation
+# Initialisation de l'état de session
 init_session_state()
 
 st.title("🕵️ AML 1v1 - Jeu de devinettes")
@@ -18,9 +17,6 @@ if 'player_name' not in st.session_state:
         st.stop()
 
 # Simule deux joueurs
-if 'player_ready' not in st.session_state:
-    st.session_state.player_ready = False
-
 if not st.session_state.player_ready:
     if st.button("Rejoindre la partie"):
         st.session_state.player_ready = True
@@ -47,8 +43,8 @@ else:
     if not st.session_state.hint_given and st.session_state.player_name == "Joueur 1":
         hint = st.text_input("Entrez un indice (sans le mot cible) :")
         if hint:
-            normalized_hint = unidecode.unidecode(hint.lower())
-            normalized_card = unidecode.unidecode(current_card.lower())
+            normalized_hint = normalize(hint)
+            normalized_card = normalize(current_card)
             if normalized_card in normalized_hint:
                 st.warning("❌ L'indice contient le mot à deviner !")
             else:
